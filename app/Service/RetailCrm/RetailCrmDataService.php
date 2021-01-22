@@ -38,7 +38,6 @@ class RetailCrmDataService
     {
         $filters = $this->userFiltersService->getBaseFilters($userFilters);
 
-
         $orders = $this->retailCrmOrderService->getOrdersByFilters($filters);
 
         return [
