@@ -45,18 +45,21 @@ class RetailCrmCourierService
                 $existCourier = Courier::where('exId', (string)$courier['id'])->first();
                 if ($existCourier === null) {
                     $newCourier = $this->setNewCourier($courier);
-                    $needCourier = $newCourier;
+                    $needCourier = $newCourier->toArray();
 
                 } else {
-                    $needCourier = $existCourier;
+                    $needCourier = $existCourier->toArray();
                 }
 
-                if ($needCourier !== null && $needCourier['active'] === true) {
+
+                if ($needCourier !== null && $needCourier['active'] === 1) {
                     $couriers[] = $existCourier->toArray();
                 }
             }
 
         }
+
+        dd($couriers);
 
         return $couriers;
     }
