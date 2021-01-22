@@ -21,7 +21,9 @@ class YandexGeoCollectionService
         if ($geoQuery !== null) {
             $existGeoLocation  = GeoLocation::where('query', $geoQuery)->first();
             if ($existGeoLocation === null) {
+
                 $geoData = $this->getGeoDataForQuery($geoQuery);
+
                 if ($geoData['latitude'] !== null && $geoData['longitude'] !== null) {
                     $order['latitude'] = $geoData['latitude'];
                     $order['longitude'] = $geoData['longitude'];
@@ -115,7 +117,7 @@ class YandexGeoCollectionService
         $data['latitude'] = null;
         $data['longitude'] = null;
 
-        if (count($collection) === 0) {
+        if (count($collection) > 0) {
             foreach ($collection as  $item) {
                 $data['latitude'] = $item->getLatitude(); // широта
                 $data['longitude'] = $item->getLongitude(); // долгота

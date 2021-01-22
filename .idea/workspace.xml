@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c03dfb92-9fe6-41fe-80bb-e3a7c3a3bac9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Service/RetailCrm/RetailCrmDataService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Service/RetailCrm/RetailCrmDataService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Service/RetailCrm/RetailCrmOrderService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Service/RetailCrm/RetailCrmOrderService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Service/YandexGeo/YandexGeoCollectionService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Service/YandexGeo/YandexGeoCollectionService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/map2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/map2.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -43,7 +39,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/map2.blade.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="162">
@@ -55,11 +51,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Service/YandexGeo/YandexGeoCollectionService.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="41" column="16" selection-start-line="41" selection-start-column="16" selection-end-line="41" selection-end-column="16" />
+            <state relative-caret-position="603">
+              <caret line="119" column="34" selection-start-line="119" selection-start-column="34" selection-end-line="119" selection-end-column="34" />
               <folding>
                 <element signature="e#41#68#0#PHP" expanded="true" />
               </folding>
@@ -187,9 +183,9 @@
         <option value="$PROJECT_DIR$/app/Service/UserFilters/UserFiltersService.php" />
         <option value="$PROJECT_DIR$/app/Service/RetailCrm/Courier/RetailCrmCourierService.php" />
         <option value="$PROJECT_DIR$/app/Service/RetailCrm/RetailCrmDataService.php" />
-        <option value="$PROJECT_DIR$/app/Service/YandexGeo/YandexGeoCollectionService.php" />
         <option value="$PROJECT_DIR$/app/Service/RetailCrm/RetailCrmOrderService.php" />
         <option value="$PROJECT_DIR$/resources/views/map2.blade.php" />
+        <option value="$PROJECT_DIR$/app/Service/YandexGeo/YandexGeoCollectionService.php" />
       </list>
     </option>
   </component>
@@ -527,12 +523,12 @@
       <workItem from="1611174980298" duration="5950000" />
       <workItem from="1611232054354" duration="15020000" />
       <workItem from="1611250060050" duration="140000" />
-      <workItem from="1611302989706" duration="7405000" />
+      <workItem from="1611302989706" duration="8055000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30695000" />
+    <option name="totallyTimeSpent" value="31345000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -831,30 +827,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Service/YandexGeo/YandexGeoCollectionService.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="41" column="16" selection-start-line="41" selection-start-column="16" selection-end-line="41" selection-end-column="16" />
-          <folding>
-            <element signature="e#41#68#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/OrdersController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="24" column="52" lean-forward="true" selection-start-line="24" selection-start-column="52" selection-end-line="24" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Service/RetailCrm/RetailCrmDataService.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="586">
-          <caret line="40" column="53" selection-start-line="40" selection-start-column="53" selection-end-line="40" selection-end-column="53" />
-          <folding>
-            <element signature="e#41#99#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -874,6 +850,26 @@
           <caret line="402" column="21" selection-start-line="402" selection-start-column="21" selection-end-line="402" selection-end-column="21" />
           <folding>
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Service/RetailCrm/RetailCrmDataService.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="586">
+          <caret line="40" column="53" selection-start-line="40" selection-start-column="53" selection-end-line="40" selection-end-column="53" />
+          <folding>
+            <element signature="e#41#99#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Service/YandexGeo/YandexGeoCollectionService.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="603">
+          <caret line="119" column="34" selection-start-line="119" selection-start-column="34" selection-end-line="119" selection-end-column="34" />
+          <folding>
+            <element signature="e#41#68#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
