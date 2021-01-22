@@ -112,7 +112,14 @@ class RetailCrmOrderService
         if (isset($item['delivery']['date'])) {
             $deliveryDate = $item['delivery']['date'];
         }
+
+        $deliveryTime = '';
+        if (isset($item['delivery']['time']['from']) && isset($item['delivery']['time']['to'])) {
+            $deliveryTime = $item['delivery']['time']['from'] . ' - ' . $item['delivery']['time']['to'];
+        }
+
         $needData['deliveryDate'] = $deliveryDate;
+        $needData['deliveryTime'] = $deliveryTime;
 
         return $needData;
     }
@@ -213,6 +220,7 @@ class RetailCrmOrderService
                 $response['updatedOrder'] = $updatedOrder;
                 $response['updatedOrder']['iconColor'] = $needData['iconColor'];
                 $response['updatedOrder']['deliveryDate'] = $needData['deliveryDate'];
+                $response['updatedOrder']['deliveryTime'] = $needData['deliveryTime'];
             }
         }
 

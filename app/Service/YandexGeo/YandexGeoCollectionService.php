@@ -22,7 +22,7 @@ class YandexGeoCollectionService
             $existGeoLocation  = GeoLocation::where('query', $geoQuery)->first();
             if ($existGeoLocation === null) {
                 $geoData = $this->getGeoDataForQuery($geoQuery);
-                if (count($geoData) > 0) {
+                if ($geoData['latitude'] !== null && $geoData['longitude'] !== null) {
                     $order['latitude'] = $geoData['latitude'];
                     $order['longitude'] = $geoData['longitude'];
                     $newGeoLocation = new GeoLocation();
@@ -30,7 +30,11 @@ class YandexGeoCollectionService
                     $newGeoLocation->query = $geoQuery;
                     $newGeoLocation->longitude = $geoData['longitude'];
                     $newGeoLocation->save();
+                } else {
+                    $order['latitude'] = null;
+                    $order['longitude'] = null;
                 }
+
             } else {
                 $order['latitude'] = $existGeoLocation->latitude;
                 $order['longitude'] = $existGeoLocation->longitude;
@@ -85,7 +89,12 @@ class YandexGeoCollectionService
             if (isset($order['delivery']['address']['flat'])) {
                 $geoQuery = $geoQuery .  ', кв. '  . $order['delivery']['address']['flat'];
             }
+        } else {
+            if (isset($order['delivery']['address']['text'])) {
+                $geoQuery = $order['delivery']['address']['text'];
+            }
         }
+
 
         return $geoQuery;
     }
@@ -102,10 +111,17 @@ class YandexGeoCollectionService
             ->load();
         $response = $api->getResponse();
         $collection = $response->getList();
-        foreach ($collection as  $item) {
-            $data['latitude'] = $item->getLatitude(); // широта
-            $data['longitude'] = $item->getLongitude(); // долгота
+
+        $data['latitude'] = null;
+        $data['longitude'] = null;
+
+        if (count($collection) === 0) {
+            foreach ($collection as  $item) {
+                $data['latitude'] = $item->getLatitude(); // широта
+                $data['longitude'] = $item->getLongitude(); // долгота
+            }
         }
+
         return $data;
     }
 

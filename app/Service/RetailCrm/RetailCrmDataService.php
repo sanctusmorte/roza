@@ -40,6 +40,7 @@ class RetailCrmDataService
 
         $orders = $this->retailCrmOrderService->getOrdersByFilters($filters);
 
+
         return [
             'orders' => $orders,
             'couriers' => $this->retailCrmCourierService->getCouriers(),
