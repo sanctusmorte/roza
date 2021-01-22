@@ -40,14 +40,19 @@ class RetailCrmCourierService
         $response = $this->retailCrmApiClient->request->couriersList();
         if ($response->isSuccessful()) {
             foreach ($response->getResponse()['couriers'] as $courier) {
-                if ($courier['active'] === true) {
-                    $existCourier = Courier::where('exId', (string)$courier['id'])->first();
-                    if ($existCourier === null) {
-                        $newCourier = $this->setNewCourier($courier);
-                        $couriers[] = $newCourier->toArray();
-                    } else {
-                        $couriers[] = $existCourier->toArray();
-                    }
+                $needCourier = null;
+
+                $existCourier = Courier::where('exId', (string)$courier['id'])->first();
+                if ($existCourier === null) {
+                    $newCourier = $this->setNewCourier($courier);
+                    $needCourier = $newCourier;
+
+                } else {
+                    $needCourier = $existCourier;
+                }
+
+                if ($needCourier !== null && $needCourier['active'] === true) {
+                    $couriers[] = $existCourier->toArray();
                 }
             }
 
@@ -56,6 +61,10 @@ class RetailCrmCourierService
         return $couriers;
     }
 
+    /**
+     * @param array $requestData
+     * @return array
+     */
     public function setNewColorForExistCourier(array $requestData)
     {
         $response = [
@@ -76,6 +85,49 @@ class RetailCrmCourierService
         return $response;
     }
 
+    /**
+     * @param array $requestData
+     * @return array
+     */
+    public function setStatusForExistCourier(array $requestData)
+    {
+        $response = [
+            'error' => false,
+            'msg' => '',
+        ];
+
+        $existCourier = Courier::find((int)$requestData['courierId']);
+        if ($existCourier === null) {
+            $response['error'] = true;
+            $response['msg'] = 'Ошибка при обновлении статуса для курьера! Курьер с Id = '.$requestData['courierId'].' не найден.';
+        } else {
+            $requestStatus = $requestData['courierActiveStatus'];
+
+            if ($requestStatus === 'false') {
+                $needStatus = false;
+            } else if ($requestStatus === 'true') {
+                $needStatus = true;
+            } else {
+                $needStatus = null;
+            }
+
+            if ($needStatus === null) {
+                $response['error'] = true;
+                $response['msg'] = 'Передано неверное значение статуса для курьера!';
+            } else {
+                $existCourier->active = $needStatus;
+                $existCourier->save();
+                $response['msg'] = 'Статус курьера #'.$requestData['courierId'].' успешно изменен!';
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param array $courier
+     * @return Courier
+     */
     private function setNewCourier(array $courier)
     {
         $newCourier = new Courier();

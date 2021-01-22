@@ -34,7 +34,7 @@ class CouriersController extends Controller
         $this->retailCrmCourierService->getCouriers();
 
         return view('couriers', [
-            'couriers' => Courier::paginate(7)
+            'couriers' => Courier::paginate(12)
         ]);
     }
 
@@ -46,5 +46,14 @@ class CouriersController extends Controller
     public function update(Request $request): array
     {
         return $this->retailCrmCourierService->setNewColorForExistCourier($request->toArray());
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function updateStatus(Request $request): array
+    {
+        return $this->retailCrmCourierService->setStatusForExistCourier($request->toArray());
     }
 }

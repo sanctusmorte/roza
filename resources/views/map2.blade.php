@@ -4,6 +4,7 @@
 
 @section('head-js')
 
+
     <style type="text/css">
         html, body, #map {
             width: 100%;
@@ -328,7 +329,7 @@
                     controls: []
                 });
                 const objectManager = new ymaps.ObjectManager({
-                    clusterize: true,
+                    clusterize: false,
                     hasBalloon: false,
                 });
                 @if($data['countOrdersWithGeoLocation'] > 0)
@@ -569,4 +570,56 @@
 
 
     </script>
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                dateFormat: "dd-mm-yy"
+            });
+        });
+    </script>
+
+            <script>
+                function selectStatus(that) {
+                    let selectedStatuses = $('#selectedStatuses');
+                    let existStatuses = selectedStatuses.val();
+                    let statusCode = $(that).val();
+                    if (existStatuses === '' || existStatuses === '[]') {
+                        if ($(that).prop('checked') === true) {
+                            let newStatuses = [];
+                            newStatuses.push(statusCode);
+                            selectedStatuses.val(JSON.stringify(newStatuses));
+                        }
+                    } else {
+                        let statuses = JSON.parse(existStatuses);
+
+                        if ($(that).prop('checked') === true) {
+
+                            let isFound = false;
+                            for (let i = 0; i < statuses.length; i++) {
+                                if (statuses[i] === statusCode) {
+                                    isFound = true;
+                                }
+                            }
+                            if (isFound === false) {
+                                statuses.push(statusCode);
+                            }
+
+                        } else {
+                            let isFound = false;
+                            let foundIndex = 0;
+                            for (let t = 0; t < statuses.length; t++) {
+                                if (statuses[t] === statusCode) {
+                                    isFound = true;
+                                    foundIndex = t;
+                                }
+                            }
+                            if (isFound === true) {
+                                statuses.splice(foundIndex, 1);
+                            }
+                        }
+
+                        selectedStatuses.val(JSON.stringify(statuses));
+                    }
+                }
+            </script>
 @stop

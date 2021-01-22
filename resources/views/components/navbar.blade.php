@@ -13,8 +13,8 @@
                     <li class="nav-item {{ Request::path() === '/' ? 'active' : '' }}">
                         <a class="nav-link" href="/">Главная</a>
                     </li>
-                    <li class="nav-item {{ Request::is('map2') ? 'active' : '' }}">
-                        <a class="nav-link" href="/map2">Логистическая карта</a>
+                    <li class="nav-item {{ Request::is('map') ? 'active' : '' }}">
+                        <a class="nav-link" href="/map">Логистическая карта</a>
                     </li>
                     <li class="nav-item {{ Request::is('couriers') ? 'active' : '' }}">
                         <a class="nav-link" href="/couriers">Курьеры</a>
