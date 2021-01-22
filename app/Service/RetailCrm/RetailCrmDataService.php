@@ -22,6 +22,8 @@ class RetailCrmDataService
      * RetailCrmDataService constructor.
      * @param RetailCrmOrderService $retailCrmOrderService
      * @param RetailCrmCourierService $retailCrmCourierService
+     * @param YandexGeoCollectionService $yandexGeoCollectionService
+     * @param UserFiltersService $userFiltersService
      */
     public function __construct(RetailCrmOrderService $retailCrmOrderService, RetailCrmCourierService $retailCrmCourierService,
                                 YandexGeoCollectionService $yandexGeoCollectionService, UserFiltersService $userFiltersService)
@@ -35,6 +37,8 @@ class RetailCrmDataService
     public function init(array $userFilters)
     {
         $filters = $this->userFiltersService->getBaseFilters($userFilters);
+
+
         $orders = $this->retailCrmOrderService->getOrdersByFilters($filters);
 
         return [

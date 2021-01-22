@@ -19,6 +19,8 @@ class RetailCrmOrderService
 
     const BASE_ORDER_PARAMETERS = ['id', 'number', 'delivery', 'items', 'firstName', 'site', 'createdAt', 'customer', 'status'];
 
+    private $statuses;
+
     /**
      * RetailCrmOrderService constructor.
      * @param RetailCrmApiClientService $retailCrmApiClientService
@@ -26,11 +28,12 @@ class RetailCrmOrderService
      * @param YandexGeoCollectionService $yandexGeoCollectionService
      */
     public function __construct(RetailCrmApiClientService $retailCrmApiClientService, RetailCrmCourierService $retailCrmCourierService,
-                                YandexGeoCollectionService $yandexGeoCollectionService)
+                                YandexGeoCollectionService $yandexGeoCollectionService, RetailCrmStatusService $retailCrmStatusService)
     {
         $this->retailCrmApiClient = $retailCrmApiClientService->getApiClient();
         $this->retailCrmCourierService = $retailCrmCourierService;
         $this->yandexGeoCollectionService = $yandexGeoCollectionService;
+        $this->statuses = $retailCrmStatusService->getStatuses();
     }
 
     /**
@@ -43,6 +46,7 @@ class RetailCrmOrderService
         $finalOrders = [];
 
         $response = $this->retailCrmApiClient->request->ordersList($filters, self::PAGE, self::LIMIT);
+        //dd($filters);
         if ($response->isSuccessful()) {
             if ($response->getResponse()['pagination']['totalCount'] > self::LIMIT) {
                 for ($i = 1; $i <= $response->getResponse()['pagination']['totalPageCount']; $i++) {
@@ -60,9 +64,25 @@ class RetailCrmOrderService
             }
         }
 
-      // dd($finalOrders[1]);
-
         return $finalOrders;
+    }
+
+    /**
+     * @param string $statusCode
+     * @return string
+     */
+    private function getStatusForOrder(string $statusCode)
+    {
+        $statusName = '';
+
+
+        foreach ($this->statuses as $status) {
+            if ($statusCode === $status['code']) {
+                $statusName = $status['name'];
+            }
+        }
+
+        return $statusName;
     }
 
     /**
@@ -80,6 +100,8 @@ class RetailCrmOrderService
                 $needData[$param] = '';
             }
         }
+
+        $needData['status'] = $this->getStatusForOrder($needData['status']);
 
         $needData = $this->yandexGeoCollectionService->getGeoCollectionForOrder($needData);
         $needData = $this->getColorCodeForCourier($needData);
@@ -179,6 +201,7 @@ class RetailCrmOrderService
                 $response['msg'] = 'Заказ '.$orderId.' успешно обновлен! Курьер теперь - '.$courier.'';
                 $updatedOrder = $crmResponse->getResponse()['order'];
                 $needData = $this->prepareOrderData($updatedOrder);
+                $needData['status'] = $this->getStatusForOrder($needData['status']);
                 $response['updatedOrder'] = $updatedOrder;
                 $response['updatedOrder']['iconColor'] = $needData['iconColor'];
 

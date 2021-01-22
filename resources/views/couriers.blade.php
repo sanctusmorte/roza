@@ -44,6 +44,7 @@
             <p class="h3 my-4">Список курьеров</p>
 
             <div id="colorCodeAlert" class="d-none alert alert-danger" role="alert"></div>
+            <div id="activeStatusAlert" class="d-none alert alert-danger" role="alert"></div>
 
             <table class="table">
                 <thead class="thead-dark">
@@ -64,11 +65,11 @@
                             <td>{{ $courier['firstName'] }}</td>
                             <td>{{ $courier['lastName'] }}</td>
                             <td>
-                                @if ($courier['active'] === 1)
-                                    <span class="text-success">Да</span>
-                                @else
-                                    Нет
-                                @endif
+                                <select data-courierId="{{ $courier['id'] }}" onchange="changeActiveStatus(this);" autocomplete="off" class="custom-select pl-1 text-center">
+                                    <option value="true" @if ($courier['active'] === 1) selected="selected" @endif>Да</option>
+                                    <option value="false" @if ($courier['active'] === 0) selected="selected" @endif>Нет</option>
+                                </select>
+                                <div id="statusLoader" class="loader"></div>
                             </td>
                             <td>
                                 <input autocomplete="off" type="color" class="courierSelectColor" data-courierId="{{ $courier['id'] }}" id="colorCourier{{ $courier['id'] }}" name="colorCourier{{ $courier['id'] }}" onchange="changeColorCode(this);" value="{{ $courier['colorCode'] }}">
@@ -95,6 +96,52 @@
                 && !isNaN(Number('0x' + hex))
         }
 
+        function changeActiveStatus(that) {
+            const statusLoader = $(that).siblings('#statusLoader');
+            const courierId = parseInt($(that).attr('data-courierId'));
+            const status = $(that).val();
+            const activeStatusAlert = $('#activeStatusAlert');
+            statusLoader.show();
+            $(that).hide();
+
+            $.ajax({
+                url: '/couriers/update-status',
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                },
+                data: {
+                    'courierId' : courierId,
+                    'courierActiveStatus' : status,
+                },
+                success: function(response){
+                    setTimeout(function() {
+                        statusLoader.hide();
+                        $(that).show();
+                        activeStatusAlert.removeClass('d-none');
+                        let activeStatusAlertMsg = response.msg;
+                        activeStatusAlert.text(activeStatusAlertMsg);
+
+                        if (response.error === true) {
+                            activeStatusAlert.removeClass('alert-success');
+                            activeStatusAlert.addClass('alert-danger');
+                        } else {
+                            activeStatusAlert.removeClass('alert-danger');
+                            activeStatusAlert.addClass('alert-success');
+                        }
+
+                        setTimeout(function() {
+                            activeStatusAlert.addClass('d-none');
+                        }, 2000);
+
+                    }, 1000);
+                },
+                error: function(response){
+                },
+            });
+        }
+
+
         function changeColorCode(that) {
             const colorLoader = $(that).siblings('#colorLoader');
             const colorCodeAlert = $('#colorCodeAlert');
@@ -103,8 +150,6 @@
 
             colorLoader.show();
             $(that).hide();
-
-            console.log(isHexColor(colorCode.substr(1, 7)));
 
             if (isHexColor(colorCode.substr(1, 7)) === false) {
                 let colorCodeAlertMsg = 'Ошибка при выборе цвета для курьера #'+courierId+'! Выберите корректный Hex (#000000) код для цвета.';

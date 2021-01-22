@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [\App\Http\Controllers\IndexController::class, 'index']);
 Route::get('/couriers', [\App\Http\Controllers\CouriersController::class, 'index']);
 Route::post('/couriers/update', [\App\Http\Controllers\CouriersController::class, 'update']);
+Route::post('/couriers/update-status', [\App\Http\Controllers\CouriersController::class, 'updateStatus']);
 
 Route::get('/map', [\App\Http\Controllers\MapController::class, 'index']);
 
