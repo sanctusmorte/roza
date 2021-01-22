@@ -169,6 +169,7 @@
                         'customerFirstName': response.updatedOrder.firstName,
                         'createdAt' : response.updatedOrder.createdAt,
                         'deliveryDate' : response.updatedOrder.deliveryDate,
+                        'deliveryTime' : response.updatedOrder.deliveryTime,
                         'geoQuery' : response.updatedOrder.delivery.address.city,
                         'status' : response.updatedOrder.status,
                     },
@@ -202,6 +203,7 @@
                             'customerFirstName': response.updatedOrder.firstName,
                             'createdAt' : response.updatedOrder.createdAt,
                             'deliveryDate' : response.updatedOrder.deliveryDate,
+                            'deliveryTime' : response.updatedOrder.deliveryTime,
                             'geoQuery' : response.updatedOrder.delivery.address.city,
                             'status' : response.updatedOrder.status,
                         },
@@ -223,6 +225,7 @@
                         'customerFirstName': response.updatedOrder.firstName,
                         'createdAt' : response.updatedOrder.createdAt,
                         'deliveryDate' : response.updatedOrder.deliveryDate,
+                        'deliveryTime' : response.updatedOrder.deliveryTime,
                         'geoQuery' : response.updatedOrder.delivery.address.city,
                         'status' : response.updatedOrder.status,
                     };
@@ -405,6 +408,7 @@
                                     'customerFirstName' : existData[i].orderData.customerFirstName,
                                     'createdAt' : existData[i].orderData.createdAt,
                                     'deliveryDate' : existData[i].orderData.deliveryDate,
+                                    'deliveryTime' : existData[i].orderData.deliveryTime,
                                     'delivery' : {
                                         'code' : existData[i].orderData.balloonDeliveryMethodInfo,
                                         'data' : {
@@ -432,7 +436,7 @@
                                         }
                                     }
                                 }
-                                
+
                                 objectManager.objects.getById(objectId).properties.balloonContentBody = getBalloonContentBody(newItem);
                                 objectManager.objects.getById(objectId).options.iconColor = newItem.iconColor;
                             }
@@ -528,6 +532,7 @@
                     // '<p class="h7 mb-1"><b>Клиент:</b> '+item.customerFirstName+'</p>' +
                     '<p class="h7 mb-1"><b>Дата создания:</b> '+item.createdAt+'</p>' +
                     '<p class="h7 mb-1"><b>Дата доставки:</b> '+item.deliveryDate+'</p>' +
+                    '<p class="h7 mb-1"><b>Время доставки:</b> '+item.deliveryTime+'</p>' +
                     '<p class="h7 mb-1"><b>Статус:</b> '+item.status+'</p>' +
                     '<p class="h7 mb-1"><b>Адрес:</b> '+item.geoQuery+'</p>' +
                     '</div>' +
