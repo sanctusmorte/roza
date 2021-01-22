@@ -46,7 +46,7 @@ class RetailCrmOrderService
         $finalOrders = [];
 
         $response = $this->retailCrmApiClient->request->ordersList($filters, self::PAGE, self::LIMIT);
-        //dd($filters);
+
         if ($response->isSuccessful()) {
             if ($response->getResponse()['pagination']['totalCount'] > self::LIMIT) {
                 for ($i = 1; $i <= $response->getResponse()['pagination']['totalPageCount']; $i++) {
@@ -63,6 +63,8 @@ class RetailCrmOrderService
                 }
             }
         }
+
+
 
         return $finalOrders;
     }
@@ -105,6 +107,12 @@ class RetailCrmOrderService
 
         $needData = $this->yandexGeoCollectionService->getGeoCollectionForOrder($needData);
         $needData = $this->getColorCodeForCourier($needData);
+
+        $deliveryDate = '';
+        if (isset($item['delivery']['date'])) {
+            $deliveryDate = $item['delivery']['date'];
+        }
+        $needData['deliveryDate'] = $deliveryDate;
 
         return $needData;
     }
@@ -204,7 +212,7 @@ class RetailCrmOrderService
                 $needData['status'] = $this->getStatusForOrder($needData['status']);
                 $response['updatedOrder'] = $updatedOrder;
                 $response['updatedOrder']['iconColor'] = $needData['iconColor'];
-
+                $response['updatedOrder']['deliveryDate'] = $needData['deliveryDate'];
             }
         }
 

@@ -168,6 +168,7 @@
                         'balloonSite' : balloonSite,
                         'customerFirstName': response.updatedOrder.firstName,
                         'createdAt' : response.updatedOrder.createdAt,
+                        'deliveryDate' : response.updatedOrder.deliveryDate,
                         'geoQuery' : response.updatedOrder.delivery.address.city,
                         'status' : response.updatedOrder.status,
                     },
@@ -200,6 +201,7 @@
                             'balloonSite' : balloonSite,
                             'customerFirstName': response.updatedOrder.firstName,
                             'createdAt' : response.updatedOrder.createdAt,
+                            'deliveryDate' : response.updatedOrder.deliveryDate,
                             'geoQuery' : response.updatedOrder.delivery.address.city,
                             'status' : response.updatedOrder.status,
                         },
@@ -220,6 +222,7 @@
                         'balloonSite' : balloonSite,
                         'customerFirstName': response.updatedOrder.firstName,
                         'createdAt' : response.updatedOrder.createdAt,
+                        'deliveryDate' : response.updatedOrder.deliveryDate,
                         'geoQuery' : response.updatedOrder.delivery.address.city,
                         'status' : response.updatedOrder.status,
                     };
@@ -396,12 +399,12 @@
 
                             if(existData[i].orderId === balloonOrderId) {
 
-
                                 let newItem = {
                                     'id' : existData[i].orderId,
                                     'site' : existData[i].orderData.balloonSite,
                                     'customerFirstName' : existData[i].orderData.customerFirstName,
                                     'createdAt' : existData[i].orderData.createdAt,
+                                    'deliveryDate' : existData[i].orderData.deliveryDate,
                                     'delivery' : {
                                         'code' : existData[i].orderData.balloonDeliveryMethodInfo,
                                         'data' : {
@@ -418,19 +421,18 @@
                                 if (typeof(existData[i].items) !== "undefined" && existData[i].items.length > 0) {
                                     for (let n = 0; n < existData[i].items.length > 0; n++) {
                                         if (typeof(existData[i].items[n].offer.displayName) !== "undefined") {
+
                                             newItem.items.push({
                                                 'offer' : {
                                                   'displayName' : existData[i].items[n].offer.displayName
                                                 },
                                                 'name' : existData[i].items[n].offer.displayName,
-                                                'quantity' : existData[i].quantity,
+                                                'quantity' : existData[i].items[n].quantity,
                                             });
                                         }
                                     }
                                 }
-
-
-
+                                
                                 objectManager.objects.getById(objectId).properties.balloonContentBody = getBalloonContentBody(newItem);
                                 objectManager.objects.getById(objectId).options.iconColor = newItem.iconColor;
                             }
@@ -525,6 +527,7 @@
                     '<p class="h7 mb-1"><b>Заказ:</b> <a class="text-primary" target="_blank" href="{{ $config['url'] }}/orders/'+item.id+'/edit">'+item.id+'</a></p>' +
                     // '<p class="h7 mb-1"><b>Клиент:</b> '+item.customerFirstName+'</p>' +
                     '<p class="h7 mb-1"><b>Дата создания:</b> '+item.createdAt+'</p>' +
+                    '<p class="h7 mb-1"><b>Дата доставки:</b> '+item.deliveryDate+'</p>' +
                     '<p class="h7 mb-1"><b>Статус:</b> '+item.status+'</p>' +
                     '<p class="h7 mb-1"><b>Адрес:</b> '+item.geoQuery+'</p>' +
                     '</div>' +

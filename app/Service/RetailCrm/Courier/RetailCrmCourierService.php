@@ -59,8 +59,6 @@ class RetailCrmCourierService
 
         }
 
-        dd($couriers);
-
         return $couriers;
     }
 
