@@ -94,6 +94,7 @@
 
 @section('js')
 
+
     <script>
         // Пример реализации боковой панели на основе наследования от collection.Item.
         // Боковая панель отображает информацию, которую мы ей передали.
@@ -486,7 +487,7 @@
 
             function getBalloonCourierInfoForBalloonContentBody(item) {
                     if (item.isCourierSelected === false) {
-                        return  '<div id="balloonCourierInfo" class="mt-2 d-flex align-items-center justify-content-between">' +
+                        return  '<div id="balloonCourierInfo" class="mt-3 d-flex align-items-center justify-content-between">' +
                             '<div class="h7 mb-1 col-auto p-0 mr-2">Выбранный курьер: </div>' +
                             '<select onchange="changeBalloonCourier(this);" class="custom-select custom-select-md pl-1">' +
                             '<option value="courier" selected="true">Не выбрано</option>' +
@@ -496,7 +497,7 @@
                                     '</select>' +
                             '</div>';
                     } else {
-                        return  '<div id="balloonCourierInfo" class="mt-2 d-flex align-items-center justify-content-between">' +
+                        return  '<div id="balloonCourierInfo" class="mt-3 d-flex align-items-center justify-content-between">' +
                             '<div class="h7 mb-1 col-auto p-0 mr-2">Выбранный курьер: </div>' +
                             '<select onchange="changeBalloonCourier(this);" class="custom-select custom-select-md pl-1">' +
                                 @foreach($data['couriers'] as $existCourier)
@@ -537,16 +538,17 @@
                     '<p class="h7 mb-1"><b>Адрес:</b> '+item.geoQuery+'</p>' +
                     '</div>' +
                     '<div>' +
-                    '<p class="h7 mb-1 font-weight-bold">Состав заказа:</p>' +
+
+                    // если у заказа метод доставки = курьером
+                    // то выводим список всех активных курьеров для возможности выбора в виде <select>
+                    getBalloonCourierInfoForBalloonContentBody(item) +
+
+                    '<p class="h7 mb-1 font-weight-bold mt-3">Состав заказа:</p>' +
                     '<ul style="max-width: 300px;list-style-type: square;" class="my-2">' +
                     getItemsForBalloonContentBody(item) +
                     '</ul>' +
                     '</div>' +
                     '<hr>' +
-
-                    // если у заказа метод доставки = курьером
-                    // то выводим список всех активных курьеров для возможности выбора в виде <select>
-                    getBalloonCourierInfoForBalloonContentBody(item) +
 
                     '<input type="hidden" id="balloonDeliveryMethod" name="balloonDeliveryMethod" value="'+item.delivery.code+'">' +
                     '<input type="hidden" id="balloonCourier" name="balloonCourier" value="">' +

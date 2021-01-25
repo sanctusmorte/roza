@@ -34,7 +34,7 @@ class CouriersController extends Controller
         $this->retailCrmCourierService->getCouriers();
 
         return view('couriers', [
-            'couriers' => Courier::paginate(12)
+            'couriers' => Courier::paginate(100)
         ]);
     }
 
