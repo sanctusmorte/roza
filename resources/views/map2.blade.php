@@ -55,6 +55,10 @@
             color: #04b;
             text-decoration: none !important;
         }
+
+        #balloonCourierInfo {
+            max-width: 350px;
+        }
     </style>
 
     <script src="https://api-maps.yandex.ru/2.1/?apikey=f5de97c5-850d-4e35-b3e2-e85aba272e55&lang=ru_RU" type="text/javascript"></script>
@@ -174,6 +178,7 @@
                         'geoQuery' : response.updatedOrder.delivery.address.city,
                         'status' : response.updatedOrder.status,
                     },
+                    'externalId' : response.updatedOrder.externalId,
                     'iconColor' : response.updatedOrder.iconColor,
                     'items' : response.updatedOrder.items,
                     'existCouriers' : response.existCouriers,
@@ -208,6 +213,7 @@
                             'geoQuery' : response.updatedOrder.delivery.address.city,
                             'status' : response.updatedOrder.status,
                         },
+                        'externalId' : response.updatedOrder.externalId,
                         'iconColor' : response.updatedOrder.iconColor,
                         'items' : response.updatedOrder.items,
                         'existCouriers' : response.existCouriers,
@@ -257,9 +263,11 @@
             let balloonSelectedCourier = null;
             balloonSelectedCourier =  $(that).parents().find('#balloonCourierInfo').children('select').val();
 
+            balloonAlert.addClass('d-none');
 
             if (balloonisChanged.val() === 'false') {
                 balloonAlert.addClass('alert-danger');
+                balloonAlert.removeClass('d-none');
                 balloonAlert.text(balloonAlertMsg);
             } else {
                 $.ajax({
@@ -358,7 +366,7 @@
                         },
                         properties: {
                             balloonContentHeader: 'Заказ {{ $item['number'] }}',
-                            iconCaption: 'Заказ {{ $item['number'] }}',
+                            iconCaption: '{{ $item['deliveryTime'] }}',
                             balloonContentBody: getBalloonContentBody(<?php echo json_encode($item); ?>),
                         },
                         options: {
@@ -392,7 +400,7 @@
 
                     let htmlBalloonContentBody = feature.properties.balloonContentBody;
                     let htmlBalloonContentBodyParsed = $($.parseHTML(htmlBalloonContentBody));
-                    let balloonOrderId = parseInt($(htmlBalloonContentBodyParsed).find('#balloonOrderId').val());
+                    let balloonOrderId = parseInt(htmlBalloonContentBodyParsed[7].value);
 
                     const allUpdatedOrders = $('#allUpdatedOrders');
 
@@ -405,6 +413,7 @@
 
                                 let newItem = {
                                     'id' : existData[i].orderId,
+                                    'externalId' : existData[i].externalId,
                                     'site' : existData[i].orderData.balloonSite,
                                     'customerFirstName' : existData[i].orderData.customerFirstName,
                                     'createdAt' : existData[i].orderData.createdAt,
@@ -472,6 +481,8 @@
             function setSelectedTrueForCourier(orderSelectedCourierId, existCourierId) {
                 let finalExistCourierId = null;
 
+
+
                 if (typeof existCourierId === 'object') {
                     finalExistCourierId = existCourierId.exId;
                 } else {
@@ -486,24 +497,25 @@
             }
 
             function getBalloonCourierInfoForBalloonContentBody(item) {
+
                     if (item.isCourierSelected === false) {
-                        return  '<div id="balloonCourierInfo" class="mt-3 d-flex align-items-center justify-content-between">' +
-                            '<div class="h7 mb-1 col-auto p-0 mr-2">Выбранный курьер: </div>' +
-                            '<select onchange="changeBalloonCourier(this);" class="custom-select custom-select-md pl-1">' +
+                        return  '<div id="balloonCourierInfo" class="mt-3 mb-2 d-flex align-items-center justify-content-between">' +
+                            '<select autocomplete="off" onchange="changeBalloonCourier(this);" class="custom-select custom-select-md pl-1">' +
                             '<option value="courier" selected="true">Не выбрано</option>' +
                                 @foreach($data['couriers'] as $existCourier)
                                     '<option value="{{ $existCourier["exId"] }}">{{ $existCourier['firstName'] }}</option>' +
                                 @endforeach
                                     '</select>' +
+                            '<button onclick="saveChanges(this, '+item.id+');" class="btn btn-primary">Применить</button>' +
                             '</div>';
                     } else {
-                        return  '<div id="balloonCourierInfo" class="mt-3 d-flex align-items-center justify-content-between">' +
-                            '<div class="h7 mb-1 col-auto p-0 mr-2">Выбранный курьер: </div>' +
-                            '<select onchange="changeBalloonCourier(this);" class="custom-select custom-select-md pl-1">' +
+                        return  '<div id="balloonCourierInfo" class="mt-3 mb-2 d-flex align-items-center justify-content-between">' +
+                            '<select autocomplete="off" onchange="changeBalloonCourier(this);" class="custom-select custom-select-md pl-1">' +
                                 @foreach($data['couriers'] as $existCourier)
                                     '<option '+setSelectedTrueForCourier(item.delivery.data.id, <?php echo json_encode($existCourier); ?>)+' value="{{ $existCourier["exId"] }}">{{ $existCourier['firstName'] }}</option>' +
                                 @endforeach
                                     '</select>' +
+                            '<button onclick="saveChanges(this, '+item.id+');" class="btn btn-primary">Применить</button>' +
                             '</div>';
                     }
             }
@@ -529,7 +541,20 @@
 
                 return  '<div>' +
                     '<div>' +
-                    '<p class="h7 mb-1"><b>Заказ:</b> <a class="text-primary" target="_blank" href="{{ $config['url'] }}/orders/'+item.id+'/edit">'+item.id+'</a></p>' +
+
+                    // если у заказа метод доставки = курьером
+                    // то выводим список всех активных курьеров для возможности выбора в виде <select>
+                    getBalloonCourierInfoForBalloonContentBody(item) +
+
+                    '<div class="d-block pb-2">' +
+                    '<div id="balloonAlert" style="max-width: 350px;" class="mx-auto d-none alert my-3" role="alert"></div>' +
+                    '<div>' +
+                    '<p id="notChanges" class="d-none h6 mt-3 text-danger">Внесите изменения!</p>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+
+                    '<p class="h7 mb-1"><b>Заказ:</b> <a class="text-primary" target="_blank" href="{{ $config['url'] }}/orders/'+item.id+'/edit">'+item.externalId+'</a></p>' +
                     // '<p class="h7 mb-1"><b>Клиент:</b> '+item.customerFirstName+'</p>' +
                     '<p class="h7 mb-1"><b>Дата создания:</b> '+item.createdAt+'</p>' +
                     '<p class="h7 mb-1"><b>Дата доставки:</b> '+item.deliveryDate+'</p>' +
@@ -539,9 +564,6 @@
                     '</div>' +
                     '<div>' +
 
-                    // если у заказа метод доставки = курьером
-                    // то выводим список всех активных курьеров для возможности выбора в виде <select>
-                    getBalloonCourierInfoForBalloonContentBody(item) +
 
                     '<p class="h7 mb-1 font-weight-bold mt-3">Состав заказа:</p>' +
                     '<ul style="max-width: 300px;list-style-type: square;" class="my-2">' +
@@ -554,16 +576,9 @@
                     '<input type="hidden" id="balloonCourier" name="balloonCourier" value="">' +
                     '<input type="hidden" id="isChanged" name="isChanged" value="false">' +
                     '<input type="hidden" id="balloonSite" name="balloonSite" value="'+item.site+'">' +
-                    '<input type="hidden" id="balloonOrderId" name="balloonSite" value="'+item.id+'">' +
+                    '<input type="hidden" id="balloonOrderId" name="balloonSite" value="'+item.id+'">'
 
-                    '<div class="d-block pb-2">' +
-                    '<div id="balloonAlert" style="max-width: 350px;" class="mx-auto alert my-3" role="alert"></div>' +
-                    '<div>' +
-                    '<p id="notChanges" class="d-none h6 mt-3 text-danger">Внесите изменения!</p>' +
-                    '<button onclick="saveChanges(this, '+item.id+');" class="btn btn-primary">Применить</button>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>';
+                    ;
             }
 
             function getBalloonContentFooter(item, feature) {

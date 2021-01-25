@@ -40,7 +40,7 @@ class RetailCrmOrderService
      * @param array $filters
      * @return array
      */
-    public function getOrdersByFilters(array $filters): array
+    public function getOrdersByFilters(array $filters, array $customFilters): array
     {
         $orders = [];
         $finalOrders = [];
@@ -59,12 +59,17 @@ class RetailCrmOrderService
 
             foreach ($orders as $data) {
                 foreach ($data as $item) {
-                    $finalOrders[] = $this->prepareOrderData($item);
+                    if (isset($customFilters['inputFilterForCouriers']) and (int)$customFilters['inputFilterForCouriers'] === 1) {
+                        if (isset($item['delivery']['data']['id']) and $item['delivery']['data']['id'] === 5) {
+                            $finalOrders[] = $this->prepareOrderData($item);
+                        }
+                    } else {
+                        $finalOrders[] = $this->prepareOrderData($item);
+                    }
+
                 }
             }
         }
-
-
 
         return $finalOrders;
     }
@@ -76,7 +81,6 @@ class RetailCrmOrderService
     private function getStatusForOrder(string $statusCode)
     {
         $statusName = '';
-
 
         foreach ($this->statuses as $status) {
             if ($statusCode === $status['code']) {
@@ -104,6 +108,7 @@ class RetailCrmOrderService
         }
 
         $needData['status'] = $this->getStatusForOrder($needData['status']);
+        $needData['externalId'] = $item['externalId'];
 
         $needData = $this->yandexGeoCollectionService->getGeoCollectionForOrder($needData);
         $needData = $this->getColorCodeForCourier($needData);
@@ -221,6 +226,7 @@ class RetailCrmOrderService
                 $response['updatedOrder']['iconColor'] = $needData['iconColor'];
                 $response['updatedOrder']['deliveryDate'] = $needData['deliveryDate'];
                 $response['updatedOrder']['deliveryTime'] = $needData['deliveryTime'];
+                $response['updatedOrder']['externalId'] = $needData['externalId'];
             }
         }
 

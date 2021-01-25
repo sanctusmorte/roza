@@ -70,6 +70,7 @@ class UserFiltersService
         }
 
 
+
         if ($requestData->input('selectedStatuses') !== null ) {
             $selectedStatusess = json_decode($requestData->input('selectedStatuses'), 1);
             unset($userFilters['extendedStatus']);
@@ -80,6 +81,13 @@ class UserFiltersService
             unset($userFilters['extendedStatus']);
         }
 
+        if ($requestData->input('inputFilterForCouriers') !== null ) {
+            $userFilters['inputFilterForCouriers'] = (int)$requestData->input('inputFilterForCouriers');
+        } else {
+            $userFilters['inputFilterForCouriers'] = 0;
+        }
+
+
 
         return $userFilters;
     }
@@ -89,7 +97,11 @@ class UserFiltersService
         return self::BASE_GROUP_STATUSES;
     }
 
-
+    /**
+     * Фильтры для retailCRM
+     * @param array $userFilters
+     * @return array
+     */
     public function getBaseFilters(array $userFilters): array
     {
         $filters = [];
@@ -110,8 +122,25 @@ class UserFiltersService
             $filters['deliveryDateTo'] = $userFilters['deliveryDateTo'];
         }
 
+
         $filters['deliveryTypes'] = self::BASE_DELIVERY_TYPES;
 
         return $filters;
+    }
+
+    /**
+     * Кастомные фильтры, которые используются для фильтрации заказов из retailCRM
+     * @param array $userFilters
+     * @return array
+     */
+    public function getCustomFilters(array $userFilters): array
+    {
+        $customFilters = [];
+
+        if (isset($userFilters['inputFilterForCouriers'])) {
+            $customFilters['inputFilterForCouriers'] = (int)$userFilters['inputFilterForCouriers'];
+        }
+
+        return $customFilters;
     }
 }

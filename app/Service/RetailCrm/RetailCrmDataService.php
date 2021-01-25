@@ -37,9 +37,9 @@ class RetailCrmDataService
     public function init(array $userFilters)
     {
         $filters = $this->userFiltersService->getBaseFilters($userFilters);
+        $customFilters = $this->userFiltersService->getCustomFilters($userFilters);
 
-        $orders = $this->retailCrmOrderService->getOrdersByFilters($filters);
-
+        $orders = $this->retailCrmOrderService->getOrdersByFilters($filters, $customFilters);
 
         return [
             'orders' => $orders,
