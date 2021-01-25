@@ -98,7 +98,10 @@ class YandexGeoCollectionService
 
             if (isset($order['delivery']['address']['flat'])) {
                 $geoQuery = $geoQuery .  ', кв. '  . $order['delivery']['address']['flat'];
+            } else if (isset($order['delivery']['address']['building'])) {
+                $geoQuery = $geoQuery .  ', кв. '  . $order['delivery']['address']['building'];
             }
+
         } else {
             if (isset($order['delivery']['address']['text'])) {
                 $geoQuery = $order['delivery']['address']['text'];
