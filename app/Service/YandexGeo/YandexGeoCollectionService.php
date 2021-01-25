@@ -3,6 +3,7 @@
 namespace App\Service\YandexGeo;
 
 use App\Models\GeoLocation;
+use App\Service\GrapHopper\GrapHopperGeoCoderService;
 use App\Service\Yandex\Geo\Api;
 
 /**
@@ -12,6 +13,13 @@ use App\Service\Yandex\Geo\Api;
 class YandexGeoCollectionService
 {
     const YANDEX_GEO_TOKEN = 'f5de97c5-850d-4e35-b3e2-e85aba272e55';
+
+    private $grapHopperGeoCoderService;
+
+    public function __construct(GrapHopperGeoCoderService $grapHopperGeoCoderService)
+    {
+        $this->grapHopperGeoCoderService = $grapHopperGeoCoderService;
+    }
 
     public function getGeoCollectionForOrder(array $order): array
     {
@@ -100,6 +108,22 @@ class YandexGeoCollectionService
 
         return $geoQuery;
     }
+
+
+//    private function getGeoDataForQuery(string $query): array
+//    {
+//        $geoLocation = $this->grapHopperGeoCoderService->getGeoLocation($query);
+//
+//        $data['latitude'] = null;
+//        $data['longitude'] = null;
+//
+//        if (count($geoLocation) > 0) {
+//            $data['latitude'] = $geoLocation['latitude']; // широта
+//            $data['longitude'] = $geoLocation['longitude']; // долгота
+//        }
+//
+//        return $data;
+//    }
 
     private function getGeoDataForQuery(string $query): array
     {

@@ -15,20 +15,6 @@
 
                 <div class="modal-body">
 
-                        {{--<div class="card mb-3">--}}
-                            {{--<article class="card-group-item">--}}
-                                {{--<header class="card-header p-2">--}}
-                                    {{--<h6 class="title m-0">Группы статусов</h6>--}}
-                                {{--</header>--}}
-                                {{--<select autocomplete="off" class="custom-select pl-1" name="inputFilterByGroupStatuses">--}}
-                                    {{--<option value="all" @if (isset($userFilters['extendedStatus']) === false) selected @endif>Все группы статусов</option>--}}
-                                    {{--@foreach($baseGroupStatusFilters as $item)--}}
-                                        {{--<option @if (isset($userFilters['extendedStatus']) === true and $userFilters['extendedStatus'][0] === $item['code']) selected="true" @endif value="{{ $item['code'] }}">{{ $item['name'] }}</option>--}}
-                                    {{--@endforeach--}}
-                                {{--</select>--}}
-                            {{--</article>--}}
-                        {{--</div>--}}
-
                     <div class="card mb-3">
                         <article class="card-group-item">
                             <header class="card-header p-2">
@@ -46,12 +32,13 @@
                                 <input autocomplete="off" id="selectedStatuses" type="hidden" name="selectedStatuses" value="@if(isset($userFilters['extendedStatus'])) {{ json_encode($userFilters['extendedStatus']) }} @endif">
                             </div>
                         </article>
-
-                        <article class="card-group-item">
-                            <header class="card-header p-2">
-                                <h6 class="title m-0">Дата доставки</h6>
-                            </header>
-                            <div class="form-check pl-3 py-2 pb-3">
+                    </div>
+                    <div class="card mb-3">
+                        <header class="card-header p-2">
+                            <h6 class="title m-0">Дата доставки</h6>
+                        </header>
+                        <article class="card-group-item p-3">
+                            <div class="form-check p-0">
                                 <div>
                                     <label for="datepicker" class="col-form-label">Дата доставки с</label>
                                     <div>
@@ -66,6 +53,25 @@
                                 </div>
                             </div>
                         </article>
+                    </div>
+                    <div class="card mb-3">
+                        <header class="card-header p-2">
+                            <h6 class="title m-0">Переключатель для курьеров</h6>
+                        </header>
+                        <article class="card-group-item p-3">
+                            <select autocomplete="off" class="custom-select pl-1" name="inputFilterForCouriers">
+                                <option value="0" @if (isset($userFilters['inputFilterForCouriers']) and $userFilters['inputFilterForCouriers'] === 0) selected @endif>Позиция #1</option>
+                                <option value="1" @if (isset($userFilters['inputFilterForCouriers']) and $userFilters['inputFilterForCouriers'] === 1) selected @endif>Позиция #2</option>
+                            </select>
+                            <small class="form-text  mt-3 text-muted">
+                                Позиция #1 - заказы всех курьеров
+                            </small>
+                            <small class="form-text mt-3 text-muted">
+                                Позиция #2 - заказы на курьера "Не назначено" (id = 5)
+                            </small>
+                        </article>
+                        <div>
+                        </div>
                     </div>
 
 
