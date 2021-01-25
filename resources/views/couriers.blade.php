@@ -3,6 +3,7 @@
 @section('title', 'Курьеры')
 
 @section('css')
+
     <style>
         .loader {
             border: 4px solid #acacac;
@@ -46,7 +47,7 @@
             <div id="colorCodeAlert" class="d-none alert alert-danger" role="alert"></div>
             <div id="activeStatusAlert" class="d-none alert alert-danger" role="alert"></div>
 
-            <table class="table">
+            <table id="tableCouriers" class="table">
                 <thead class="thead-dark">
                     <tr class="text-center">
                         <th scope="col">#</th>
@@ -89,6 +90,20 @@
 @endsection
 
 @section('js')
+
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#tableCouriers').DataTable({
+                paging: false,
+                searching: false,
+                info: false,
+            });
+        } );
+    </script>
+
     <script>
         function isHexColor(hex) {
             return typeof hex === 'string'
