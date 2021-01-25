@@ -555,10 +555,12 @@
                     '</div>' +
 
                     '<p class="h7 mb-1"><b>Заказ:</b> <a class="text-primary" target="_blank" href="{{ $config['url'] }}/orders/'+item.id+'/edit">'+item.externalId+'</a></p>' +
+                    '<p class="h7 mb-1"><b>Склад:</b> '+item.id+'</p>' +
                     // '<p class="h7 mb-1"><b>Клиент:</b> '+item.customerFirstName+'</p>' +
                     '<p class="h7 mb-1"><b>Дата создания:</b> '+item.createdAt+'</p>' +
                     '<p class="h7 mb-1"><b>Дата доставки:</b> '+item.deliveryDate+'</p>' +
                     '<p class="h7 mb-1"><b>Время доставки:</b> '+item.deliveryTime+'</p>' +
+
                     '<p class="h7 mb-1"><b>Статус:</b> '+item.status+'</p>' +
                     '<p class="h7 mb-1"><b>Адрес:</b> '+item.geoQuery+'</p>' +
                     '</div>' +
